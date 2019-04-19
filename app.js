@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 
-const PORT = 4023;
-const IP = '10.0.0.98';
+
+const port = process.env.PORT || 8080;
+
 
 
 const MongoClient = require('mongodb').MongoClient;
@@ -235,4 +236,4 @@ app.post('/sendAMessage', (req, res) => {
 
 
 
-app.listen(PORT, IP, () => console.log(`${IP}:${PORT}`));
+app.listen(port, () => console.log(`${IP}:${PORT}`));
