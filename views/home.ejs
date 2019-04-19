@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        body, html {
+            font-family:sans-serif;
+            margin:0;
+        }
+        #title {
+            background:rgb(41, 203, 122);
+            padding:1%;
+            text-align:center;
+            margin:0;
+        } #navigationBar {
+            background:hsl(323, 93%, 29%);
+            display:flex;
+            justify-content:space-around;
+            padding:1%;
+        } .navElement {
+            background:white;
+            padding:1%;
+            border-radius:1em;
+        } #today {
+            background:hsl(212, 61%, 41%);
+            width:62%;
+            height:50vh;
+            margin:auto;
+            margin-top:3vh;
+            color:white;
+            text-align:center;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-evenly;
+        } #welcome {
+            background:hsl(49, 80%, 62%);
+            text-align:center;
+            height:3em;
+            display:flex;
+            justify-content:center;
+            flex-direction:column;
+        }
+        </style>
+    </head>
+    <body>
+        <h1 id='title'>The Astrology App</h1>
+        <nav id='navigationBar'>
+            <div class='navElement'><a href='/home'>home</a></div>
+            <div class='navElement'><a href='/info'>Info</a></div>
+            <div class='navElement'><a href='/search'>Search</a></div>
+            <div class='navElement'><a href='/messages'>messages</a></div>
+            <div class='navElement'><a href='/editProfile'>profile</a></div>
+        </nav>
+<section id='welcome'>
+<article>
+Welcome <span id='theName'></span>, the <span id='theTropical'></span> <span id='theChinese'></span>.
+</article>
+</section>
+        <section id='today'>
+            <article>
+                Today is 
+                <span id='dayOfTheWeek'></span>
+                <span id='todaysMonth'></span>
+                <span id='todaysDay'></span>,
+                <span id='todaysYear'></span>.
+            </article>
+            <article>
+                In Tropical Astrology, we are in 
+                <span id='tropicalDate'></span>.
+            </article>
+            <article>
+                We are in the actual constellation of 
+                <span id='realDate'></span>.
+            </article>
+            <article>
+                    In Chinese Astrology it is year of the Earth Pig.
+            </article>
+        </section>
+    </body>
+    <script>
+
+        const dayOfTheWeek = document.getElementById('dayOfTheWeek');
+        const todaysMonth = document.getElementById('todaysMonth');
+        const todaysDay = document.getElementById('todaysDay');
+        const todaysYear = document.getElementById('todaysYear');
+        const tropicalDate = document.getElementById('tropicalDate');
+        const realDate = document.getElementById('realDate');
+        const theName = document.getElementById('theName');
+        const theTropical = document.getElementById('theTropical');
+        const theChinese = document.getElementById('theChinese');
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            let date = new Date();
+            let dayName = date.getDay();
+            let month = date.getMonth();
+            let day = date.getDate();
+            let year = date.getFullYear();
+
+            let months = [
+                'January', 'February', 'March', 'April', 'May', 'June', 
+                'July', 'August', 'Septemper', 'October', 'November', 'December'
+            ];
+
+            let daysOfTheWeek = [
+                'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+            ];
+
+            dayOfTheWeek.innerText = daysOfTheWeek[dayName];
+            todaysMonth.innerText = months[month];
+            todaysDay.innerText = day;
+            todaysYear.innerText = year;
+            
+            let tropicalSign;
+
+            month += 1;
+
+                if (month == 3 && day >= 21 || month == 4 && day < 21) {
+                tropicalSign = 'aries';
+            } else if (month == 4 && day >= 21 || month == 5 && day < 22) {
+                tropicalSign = 'taurus';
+            } else if (month == 5 && day >= 22 || month == 6 && day < 22) {
+                tropicalSign = 'gemini';
+            } else if (month == 6 && day >= 22 || month == 7 && day < 23) {
+                tropicalSign = 'cancer';
+            } else if (month == 7 && day >= 23 || month == 8 && day < 23) {
+                tropicalSign = 'leo';
+            } else if (month == 8 && day >= 23 || month == 9 && day < 23) {
+                tropicalSign = 'virgo';
+            } else if (month == 9 && day >= 23 || month == 10 && day < 23) {
+                tropicalSign = 'libra';
+            } else if (month == 10 && day >= 23 || month == 11 && day < 22) {
+                tropicalSign = 'scorpio';
+            } else if (month == 11 && day >= 22 || month == 12 && day < 22) {
+                tropicalSign = 'sagittarius';
+            } else if (month == 12 && day >= 22 || month == 1 && day < 20) {
+                tropicalSign = 'capricorn';
+            } else if (month == 1 && day >= 20 || month == 2 && day < 20) {
+                tropicalSign = 'aquarius';
+            } else if (month == 2 && day >= 20 || month == 3 && day < 21) {
+                tropicalSign = 'pisces';
+            }
+
+            tropicalDate.innerText = tropicalSign;
+
+                if (month == 4 && day >= 18 || month == 5 && day < 13) {
+                realSign = 'aries';
+            } else if (month == 5 && day >= 13 || month == 6 && day < 21) {
+                realSign = 'taurus';
+            } else if (month == 6 && day >= 21 || month == 7 && day < 20) {
+                realSign = 'gemini';
+            } else if (month == 7 && day >= 20 || month == 8 && day < 10) {
+                realSign = 'cancer';
+            } else if (month == 8 && day >= 10 || month == 9 && day < 16) {
+                realSign = 'leo';
+            } else if (month == 9 && day >= 16 || month == 10 && day < 30) {
+                realSign = 'virgo';
+            } else if (month == 10 && day >= 30 || month == 11 && day < 23) {
+                realSign = 'libra';
+            } else if (month == 11 && day >= 23 || month == 11 && day < 29) {
+                realSign = 'scorpio';
+            } else if (month == 11 && day >= 29 || month == 12 && day < 17) {
+                realSign = 'ophiuchus';
+            } else if (month == 12 && day >= 17 || month == 1 && day < 21) {
+                realSign = 'sagittarius';
+            } else if (month == 1 && day >= 20 || month == 2 && day < 16) {
+                realSign = 'capricorn';
+            } else if (month == 2 && day >= 16 || month == 3 && day < 11) {
+                realSign = 'aquarius';
+            } else if (month == 3 && day >= 11 || month == 4 && day < 18) {
+                realSign = 'pisces';
+            }
+
+            realDate.innerText = realSign;
+
+
+        });
+
+        (() => {
+
+            let split = document.cookie.split('; ');
+
+            for (let i = 0; i < split.length; i++) {
+                switch (split[i].split('=')[0]) {
+                    case 'accountName':
+                        theName.innerText = split[i].split('=')[1];
+                    break;
+                    case 'userTropical':
+                        theTropical.innerText = split[i].split('=')[1];
+                    break;
+                    case 'userChinese':
+                        theChinese.innerText = split[i].split('=')[1];
+                    break;
+                }
+            }
+        })()
+
+
+    </script>
+</html>

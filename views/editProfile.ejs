@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body, html {
+                font-family:sans-serif;
+                margin:0;
+            } 
+              #editPicture {
+                background:hsl(157, 50%, 50%);
+                width:fit-content;
+                padding:1%;
+                text-align:center;
+                margin:auto;
+                margin-top:1vh;
+            } input {
+                background:hsl(219, 100%, 74%);
+            } #navigationBar {
+                background:hsl(323, 93%, 29%);
+                display:flex;
+                justify-content:space-around;
+                padding:1%;
+            } .navElement {
+                background:white;
+                padding:1%;
+                border-radius:1em;
+            } h1 {
+                background:hsl(184, 98%, 35%);
+                color:white;
+                text-align:center;
+                margin:0;
+            } #meta {
+                background:hsl(157, 50%, 50%);
+                width:fit-content;
+                padding:1%;
+                text-align:center;
+                margin:auto;
+                margin-top:1vh;
+            } 
+        </style>
+    </head>
+    <body>
+        <h1>Edit Profile</h1>
+        <nav id='navigationBar'>
+            <div class='navElement'><a href='/home'>home</a></div>
+            <div class='navElement'><a href='/info'>Info</a></div>
+            <div class='navElement'><a href='/search'>Search</a></div>
+            <div class='navElement'><a href='/messages'>messages</a></div>
+            <div class='navElement'><a href='/editProfile'>profile</a></div>
+        </nav>
+
+        <form id='editPicture' action="/upload" enctype="multipart/form-data" method="POST">
+            <label>Edit Picture</label><br/>
+            <input type="file" name="myImage" id="myImage" required /><br/>
+            <input type="submit" value="Upload"  />
+        </form>
+        <form id='meta' action='/addMetaData' method='POST'>
+            <label>Edit Meta Data</label><br/>
+            <input name='meta'><br/>
+            <input type='submit'>
+        </form>
+
+    </body>
+    <script>
+    
+    </script>
+</html>

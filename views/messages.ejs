@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body, html {
+                font-family:sans-serif;
+                margin:0;
+            } h3 {
+                background:hsl(130, 66%, 51%);
+                text-align:center;
+                padding:1%;
+                margin:0;
+            } ul {
+                list-style-type:none;
+                background:hsl(130, 66%, 51%);
+                width:15vw;
+                margin:auto;
+                padding:1%;
+                border-radius:1em;
+                text-align:center;
+            } li {
+                text-decoration:underline;
+                cursor:pointer;
+                color:blue;
+            } #navigationBar {
+                background:hsl(323, 93%, 29%);
+                display:flex;
+                justify-content:space-around;
+                padding:1%;
+            } .navElement {
+                background:white;
+                padding:1%;
+                border-radius:1em;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>
+            Messages From
+        </h3>
+        <nav>
+            <nav id='navigationBar'>
+                <div class='navElement'><a href='/home'>home</a></div>
+                <div class='navElement'><a href='/info'>Info</a></div>
+                <div class='navElement'><a href='/search'>Search</a></div>
+                <div class='navElement'><a href='/messages'>messages</a></div>
+                <div class='navElement'><a href='/editProfile'>profile</a></div>
+        </nav>
+        <ul id='theList'>
+            <% for (let i = 0; i < data.length; i++) { %>
+                <li><%= data[i].sender %></li>
+            <% } %>
+        </ul>
+
+    </body>
+    <script>
+
+        const theList = document.getElementById('theList');
+
+        theList.addEventListener('click', e => {
+            document.cookie = `theSender=${e.target.textContent}`;
+            window.location.pathname = '/messagesFrom'
+        })
+
+
+
+        const lis = document.getElementsByTagName('li');
+        let multiples = true, counter = 1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            for (let i = 1; i < lis.length; i++) {
+                for (let j = 0; j < counter; j++) {
+                    if (lis[i].textContent === lis[j].textContent) {
+                        lis[i].innerText = ''
+                    }
+                }
+                counter++;
+            }
+            for (let i = 0; i < lis.length; i++) {
+                if (lis[i].textContent === '') {
+                    lis[i].remove()
+                }
+            }
+            
+        })
+        
+    </script>
+</html>

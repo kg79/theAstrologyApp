@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body, html {
+                background:hsl(162, 71%, 34%);
+                font-family:sans-serif;
+                margin:0;
+            } h1 {
+                background:hsl(12, 67%, 49%);
+                color:white;
+                text-align:center;
+                margin:0;
+            } #searcher {
+                border:solid white 3px;
+                height:10vh;
+                display:flex;
+                justify-content:space-around;
+            } .astrology {
+                background:hsl(184, 69%, 38%);
+                width:fit-content;
+                height:100%;
+                display:flex;
+                flex-direction:column;
+                justify-content:space-evenly;
+                text-align:center;
+            } #plus, #equals, #love {
+                width:fit-content;
+                height:100%;
+                display:flex;
+                flex-direction: column;
+                justify-content:center;
+                font-size:130%;
+            } span {
+                background:hsl(184, 69%, 38%);
+            } #dataTable {
+                background:hsl(197, 60%, 46%);
+                margin:auto;
+                margin-top:3vh;
+                border-collapse:collapse;
+            } td, th {
+                border:solid .15em black;
+            } #theSigns {
+                background:hsl(239, 68%, 39%);
+                color:white;
+                text-align:center;
+                padding:1%;
+            } #navigationBar {
+                background:hsl(323, 93%, 29%);
+                display:flex;
+                justify-content:space-around;
+                padding:1%;
+            } .navElement {
+                background:white;
+                padding:1%;
+                border-radius:1em;
+            } #compatibilities {
+                background:hsl(49, 80%, 62%);
+                width:80vw;
+                height:18em;
+                margin:auto;
+                margin-top:3vh;
+                text-align:center;
+                display:flex;
+                justify-content:space-evenly;
+                flex-direction:column;
+            } img {
+                align-self:center;
+            } td {
+                text-align:center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Search</h1>
+        <nav id='navigationBar'>
+            <div class='navElement'><a href='/home'>home</a></div>
+            <div class='navElement'><a href='/info'>Info</a></div>
+            <div class='navElement'><a href='/search'>Search</a></div>
+            <div class='navElement'><a href='/messages'>messages</a></div>
+            <div class='navElement'><a href='/editProfile'>profile</a></div>
+        </nav>
+        <form id='searcher' action='/searching' method='GET'>
+            <section class='astrology'>
+                <div>Tropical</div>
+                <select name='tropical'>
+                    <option value="aries">aries</option>
+                    <option value="taurus">taurus</option>
+                    <option value="gemini">gemini</option>
+                    <option value="cancer">cancer</option>
+                    <option value="leo">leo</option>
+                    <option value="virgo">virgo</option>
+                    <option value="libra">libra</option>
+                    <option value="scorpio">scorpio</option>
+                    <option value="sagittarius">sagittarius</option>
+                    <option value="capricorn">capricorn</option>
+                    <option value="aquarius">aquarius</option>
+                    <option value="pisces">pisces</option>
+                </select>
+            </section>
+
+            <section id='plus'>
+                <span>+</span>
+            </section>
+
+            <section class='astrology'>
+                <div>Chinese</div>
+                <select name='chinese'>
+                    <option value="rat">rat</option>
+                    <option value="ox">ox</option>
+                    <option value="tiger">tiger</option>
+                    <option value="rabbit">rabbit</option>
+                    <option value="dragon">dragon</option>
+                    <option value="snake">snake</option>
+                    <option value="horse">horse</option>
+                    <option value="goat">goat</option>
+                    <option value="monkey">monkey</option>
+                    <option value="rooster">rooster</option>
+                    <option value="dog">dog</option>
+                    <option value="pig">pig</option>
+                </select>
+            </section>
+
+            <section id='equals'>
+                    <span>=</span>
+            </section>
+
+            <section id='love'>
+                <input type='submit'>
+            </section>
+        </form>
+        <section id='compatibilities'>
+            <article id='tropicalCompatibilities'></article>
+            <article id='chineseCompatibilities'></article>
+            <img src='/elementPic.jpg' height='200'>
+        </section>
+
+        <section id='theSigns'>
+            <%= data[0].tropical %> <%= data[0].chinese %>'s
+        </section>
+
+        <table id='dataTable'>
+                <th>username</th><th>birthday</th><th>element</th><th>picture</th><th>meta</th><th>send message</th>
+
+                <% for (let i = 0; i < data.length; i++) { %>
+            <tr data-index='<%= i %>'>
+                <td class='theUserName'><%= data[i].username %></td>
+                <td><%= data[i].birth %></td>
+                <td><%= data[i].element %></td>
+                <td><img id='picture' src='/uploads/<%= data[i].picture %>' height='300' width='300'></td>
+                <td><%= data[i].meta %></td>
+                <td>
+                    <form method='POST' action='/sendAMessage' onsubmit='addData()'>
+                    <input name='receiver' type='hidden' id='receiver'><br/>
+                    <textarea name='message'></textarea><br/>
+                    <input type='submit'>
+                    </form>
+                </td>
+
+            </tr>
+            <% } %>
+        </table>
+        <input type='hidden' id='hiddenValue' name='hiddenIndex'>
+    </body>
+    <script>
+    // const rows = document.getElementsByTagName('tr');
+    const dataTable = document.getElementById('dataTable');
+    // const hiddenValue = document.getElementById('hiddenValue');
+    // const theUserName = document.getElementsByClassName('theUserName');
+
+
+
+        const compatibilities = document.getElementById('compatibilities');
+        const tropicalCompatibilities = document.getElementById('tropicalCompatibilities');
+        const chineseCompatibilities = document.getElementById('chineseCompatibilities');
+
+// Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces
+    let tropicalCompats = [];
+    (() => {
+
+        let split = document.cookie.split('; ');
+        for (let i = 0; i < split.length; i++) {
+            switch (split[i].split('=')[0]) {
+                case 'accountName':
+
+                break;
+                case 'userTropical':
+                    switch (split[i].split('=')[1]) {
+                        case 'aries':
+                        tropicalCompats = ['Gemini', 'Leo', 'Sagittarius', 'Aquarius'];
+                        break;
+                        case 'taurus':
+                        tropicalCompats = ['Cancer', 'Virgo', 'Capricorn', 'Pisces'];
+                        break;
+                        case 'gemini':
+                        tropicalCompats = ['Leo', 'Libra', 'Aquarius', 'Aries'];
+                        break;
+                        case 'cancer':
+                        tropicalCompats = ['Virgo', 'Scorpio', 'Pisces', 'Taurus'];
+                        break;
+                        case 'leo':
+                        tropicalCompats = ['Libra', 'Sagittarius', 'Aquarius', 'Gemini'];
+                        break;
+                        case 'virgo':
+                        tropicalCompats = ['Scorpio', 'Capricorn', 'Pisces', 'Taurus'];
+                        break;
+                        case 'libra':
+                        tropicalCompats = ['Sagittarius', 'Aquarius', 'Gemini', 'Leo'];
+                        break;
+                        case 'scorpio':
+                        tropicalCompats = ['Capricorn', 'Pisces', 'Cancer', 'Virgo'];
+                        break;
+                        case 'sagittarius':
+                        tropicalCompats = ['Aquarius', 'Aries', 'Leo', 'Libra'];
+                        break;
+                        case 'capricorn':
+                        tropicalCompats = ['Pisces', 'Taurus', 'Virgo', 'Scorpio'];
+                        break;
+                        case 'aquarius':
+                        tropicalCompats = ['Aries', 'Gemini', 'Libra', 'Sagittarius'];
+                        break;
+                        case 'pisces':
+                        tropicalCompats = ['Taurus', 'Cancer', 'Virgo', 'Capricorn'];
+                        break;
+                    }
+                break;
+                case 'userChinese':
+                    switch (split[i].split('=')[1]) {
+                        case 'rat':
+                            chineseCompats = ['Ox', 'Dragon', 'Monkey']
+                        break;
+                        case 'ox':
+                            chineseCompats = ['Rat', 'Snake', "Rooster"]
+                        break;
+                        case 'tiger':
+                            chineseCompats = ['Horse', 'Dog', 'Pig']
+                        break;
+                        case 'rabbit':
+                            chineseCompats = ['Goat', 'Dog', 'Pig']
+                        break;
+                        case 'dragon':
+                            chineseCompats = ['Rat', 'Monkey', 'Rooster']
+                        break;
+                        case 'snake':
+                            chineseCompats = ['Ox', 'Monkey', 'Rooster']
+                        break;
+                        case 'horse':
+                            chineseCompats = ['Tiger', 'Goat', 'Dog']
+                        break;
+                        case 'goat':
+                            chineseCompats = ['Rabbit', 'Horse', 'Pig']
+                        break;
+                        case 'monkey':
+                            chineseCompats = ['Rat', 'Dragon', 'Snake']
+                        break;
+                        case 'rooster':
+                            chineseCompats = ['Ox', 'Dragon', 'Snake']
+                        break;
+                        case 'dog':
+                            chineseCompats = ['Tiger', 'Rabbit', 'Horse']
+                        break;
+                        case 'pig':
+                            chineseCompats = ['Tiger', 'Rabbit', 'Goat']
+                        break;
+                    }
+                break;
+            }
+        }
+        tropicalCompatibilities.innerText = `Your tropical compatibilities are ${tropicalCompats.join(', ')}`
+        chineseCompatibilities.innerText = `Your chinese compatibilities are ${chineseCompats.join(', ')}`
+    })()
+    
+
+    const receiver = document.getElementById('receiver');
+
+    const theUserName = document.getElementsByClassName('theUserName');
+
+    document.addEventListener('click', e => {
+        let userIndex = parseInt(e.srcElement.parentElement.parentElement.parentElement.getAttribute('data-index'));
+        receiver.value = theUserName[userIndex].textContent;
+    })
+
+</script>
+</html>

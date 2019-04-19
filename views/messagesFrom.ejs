@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body, html {
+                margin:0;
+                font-family:sans-serif;
+            } h3 {
+                background:hsl(241, 77%, 60%);
+                padding:1%;
+                margin:0;
+                text-align:center;
+            } table {
+                border-collapse:collapse;
+                background:hsl(150, 69%, 56%);
+                margin:auto;
+                margin-top:1vh;
+            } td, th {
+                border:solid .16em black;
+            } #navigationBar {
+                background:hsl(323, 93%, 29%);
+                display:flex;
+                justify-content:space-around;
+                padding:1%;
+            } .navElement {
+                background:white;
+                padding:1%;
+                border-radius:1em;
+            } #replyBox {
+                background:hsl(241, 77%, 60%);
+                color:white;
+                width:fit-content;
+                margin:auto;
+                padding:1%;
+                margin-top:1vh;
+                text-align:center;
+            } #submitButton {
+                margin-top:5%;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Messages</h3>
+            <nav id='navigationBar'>
+                <div class='navElement'><a href='/home'>home</a></div>
+                <div class='navElement'><a href='/info'>Info</a></div>
+                <div class='navElement'><a href='/search'>Search</a></div>
+                <div class='navElement'><a href='/messages'>messages</a></div>
+                <div class='navElement'><a href='/editProfile'>profile</a></div>
+            </nav>
+        <table>
+            <% for (let i = 0; i < data.length; i++) { %>
+                <tr>
+                    <td><%= data[i].sender %></td><td><%= data[i].message %></td>
+                </tr>
+            <% } %>
+        </table>
+        <form id='replyBox' method='POST' action='/reply' onsubmit='checker()'>
+            <label>reply: </label><input type='text' name='message'><br/>
+            <input type='submit' id='submitButton'>
+        </form>
+
+    </body>
+    <script>
+        function checker() { location.reload() }
+    </script>
+</html>
