@@ -7,6 +7,7 @@ const port = process.env.PORT || 8084;
 const MongoClient = require('mongodb').MongoClient;
 
 const url = process.env.theMongo || process.env.MONGODB_URI;
+
 const bcrypt = require('bcrypt');
 
 const multer = require('multer');
@@ -45,23 +46,20 @@ app.get('/favicon.ico', (req, res) => {
 
 app.get('/astroLanding', (req, res) => {
     res.render('astroLanding');
-})
+});
 
 app.get('/home', (req, res) => {
     res.render('home');
-})
+});
 
 app.get('/astrology', (req, res) => {
     res.render('astrology');
-})
+});
 
-app.get('/astroWorld', (req, res) => {
-    res.render('astroWorld');
-})
 
 app.get('/editProfile', (req, res) => {
     res.render('editProfile');
-})
+});
 
 app.post('/upload', (req, res) => {
     upload(req, res, (err) => {
@@ -70,7 +68,7 @@ app.post('/upload', (req, res) => {
         } else {
             MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
                 if (err) throw err;
-                var dbo = db.db("astroWorld");
+                var dbo = db.db("nouns");
                 dbo.collection('people').updateOne({'username':`${req.cookies.accountName}`}, {$set: {'picture':`${req.file.filename}`}}, (err, r) => {
                     res.render('editProfile');
                 })
@@ -82,7 +80,7 @@ app.post('/upload', (req, res) => {
 app.post('/signUp', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         bcrypt.hash(req.body.password, 5, function(err, hash) {
             dbo.collection("people").insertOne({
                 username:req.body.username,
@@ -102,7 +100,7 @@ app.post('/signUp', (req, res) => {
 app.post('/logIn', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("people").find({"username":`${req.body.username}`}).toArray((err, data) => {
             bcrypt.compare(req.body.password, data[0].pass, function(err, result) {
                 if (result) {
@@ -126,7 +124,7 @@ app.get('/search', (req, res) => {
 app.get('/searching', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("people").find({$and:[{'tropical':`${req.query.tropical}`}, {'chinese':`${req.query.chinese}`}]}).toArray((err, data) => {
             if (err) throw err;
             res.render('searching', {data})
@@ -137,7 +135,7 @@ app.get('/searching', (req, res) => {
 app.get('/profile', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("people").find({'username':`${req.cookies.theUsersName}`}).toArray((err, data) => {
             res.render('profile', {data})
         });
@@ -147,7 +145,7 @@ app.get('/profile', (req, res) => {
 app.post('/sendMessage', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("messages").insertOne({
             sender:req.body.sender,
             receiver:req.body.receiver,
@@ -160,7 +158,7 @@ app.post('/sendMessage', (req, res) => {
 app.get('/messages', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("messages").find({'receiver':`${req.cookies.accountName}`}).toArray((err, data) => {
             res.render('messages', {data})
         });
@@ -170,7 +168,7 @@ app.get('/messages', (req, res) => {
 app.get('/messagesFrom', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("messages").find({
             '$or':[
                 {'$and':[{'sender':`${req.cookies.theSender}`},{'receiver':`${req.cookies.accountName}`}]},
@@ -184,7 +182,7 @@ app.get('/messagesFrom', (req, res) => {
 app.post('/reply', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("messages").insertOne({
             sender:req.cookies.accountName,
             receiver:req.cookies.theSender,
@@ -201,7 +199,7 @@ app.get('/profiler', (req, res) => {
 app.post('/updateTest', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection('people').updateOne({'username':`${req.cookies.accountName}`}, {$set: {'picture':'shit'}}, (err, r) => {
             res.end('bingo bitch');
         });
@@ -211,7 +209,7 @@ app.post('/updateTest', (req, res) => {
 app.post('/addMetaData', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection('people').updateOne({'username':`${req.cookies.accountName}`}, {$set: {'meta':req.body.meta}}, (err, r) => {
             res.render('editProfile');
         });
@@ -221,7 +219,7 @@ app.post('/addMetaData', (req, res) => {
 app.post('/sendAMessage', (req, res) => {
     MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("astroWorld");
+        var dbo = db.db("nouns");
         dbo.collection("messages").insertOne({
             sender:req.cookies.accountName,
             receiver:req.body.receiver,
