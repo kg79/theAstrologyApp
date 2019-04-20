@@ -2,13 +2,11 @@ const express = require('express');
 const app = express();
 
 
-const port = process.env.PORT || 8080;
-
-
+const port = process.env.PORT || 8084;
 
 const MongoClient = require('mongodb').MongoClient;
 
-const url = 'mongodb://127.0.0.1:27017';
+const url = process.env.theMongo || process.env.MONGODB_URI;
 const bcrypt = require('bcrypt');
 
 const multer = require('multer');
@@ -236,4 +234,4 @@ app.post('/sendAMessage', (req, res) => {
 
 
 
-app.listen(port, () => console.log(`${IP}:${PORT}`));
+app.listen(port);
